@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "智能新闻"
+    },
+    {
+      "name": "use_internet_reason",
+      "value": "使用网络"
+    },
+    {
+      "name": "user_privacy_policy_tips",
+      "value": "感谢您信任并使用智能新闻！我们将通过《用户协议》和《智能新闻隐私政策》帮组您了解我们收集、使用、存储和共享个人信息的情况，特别是我们所采集的个人信息类别与用途的对应关系。此外，我们还能了解到您所享有的相关权利及实现途径。如您同意，请点击下方同意按钮开始接受我们的服务。"
+    },
+    {
+      "name": "welcome_use_app",
+      "value": "欢迎使用智能新闻"
+    },
+    {
+      "name": "tab_home",
+      "value": "主页"
+    },
+    {
+      "name": "tab_video",
+      "value": "视频"
+    },
+    {
+      "name": "tab_me",
+      "value": "我的"
+    }
+  ]
+}

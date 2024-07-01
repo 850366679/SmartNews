@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Smart News"
+    },
+    {
+      "name": "use_internet_reason",
+      "value": "use internet"
+    },
+    {
+      "name": "user_privacy_policy_tips",
+      "value": "Thank you for trusting and using Smart news! We will use the \"User Agreement\" and \"Smart News Privacy Policy\" to help you understand our collection, use, storage and sharing of personal information, in particular the categories of personal information we collect and the corresponding relationship between purposes. In addition, we can learn about your rights and how to achieve them. If you agree, please click the agree button below to start receiving our services."
+    },
+    {
+      "name": "welcome_use_app",
+      "value": "Welcome to Smart News"
+    },
+    {
+      "name": "tab_home",
+      "value": "Home"
+    },
+    {
+      "name": "tab_video",
+      "value": "Video"
+    },
+    {
+      "name": "tab_me",
+      "value": "Me"
+    }
+  ]
+}
