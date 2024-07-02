@@ -10,14 +10,14 @@ import { NewsDetail } from '../../pages/NewsDetailPage'
 @Preview
 @Component
 export struct ItemVideo {
-  @ObjectLink item: VideoInfo
+  @State item: VideoInfo = new VideoInfo()
 
   /**
    * 跳转至详情
    */
   jumpToDetail() {
-    let info : NewsDetail = {isVideo : true, data : this.item}
-    router.pushUrl({ url: 'pages/NewsDetailPage', params : info })
+    let info: NewsDetail = { isVideo: true, data: this.item }
+    router.pushUrl({ url: 'pages/NewsDetailPage', params: info })
   }
 
   build() {
@@ -35,14 +35,7 @@ export struct ItemVideo {
       this.showVideo()
 
       ItemBottom({
-        shares: this.item.shares,
-        isShared: this.item.isShared,
-        comments: this.item.comments,
-        isCommented: this.item.isCommented,
-        likes: this.item.likes,
-        isLiked: this.item.isLiked,
-        collections: this.item.collections,
-        isCollected: this.item.isCollected,
+        socialInfo: this.item,
         shareClick: () => {
           if (this.item.isShared) {
             this.item.shares -= 1
@@ -78,9 +71,6 @@ export struct ItemVideo {
 
   @Builder
   showVideo() {
-    Video({src : $rawfile('video4.mp4')}).height(200)
-    // Image($r('app.media.big_image')).height(200).onClick(() => {
-    //   this.jumpToDetail()
-    // })
+    Video({ src: $rawfile('video4.mp4') }).height(200)
   }
 }

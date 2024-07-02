@@ -10,14 +10,14 @@ import { NewsDetail } from '../../pages/NewsDetailPage'
 @Preview
 @Component
 export struct ItemNews {
-  @ObjectLink newsInfo: NewsInfo
+  @State newsInfo: NewsInfo = new NewsInfo()
 
   /**
    * 跳转至详情
    */
   jumpToDetail() {
-    let info : NewsDetail = {isVideo : false, data : this.newsInfo}
-    router.pushUrl({ url: 'pages/NewsDetailPage', params : info })
+    let info: NewsDetail = { isVideo: false, data: this.newsInfo }
+    router.pushUrl({ url: 'pages/NewsDetailPage', params: info })
   }
 
   build() {
@@ -36,14 +36,7 @@ export struct ItemNews {
       this.ShowImage()
 
       ItemBottom({
-        shares: this.newsInfo.shares,
-        isShared: this.newsInfo.isShared,
-        comments: this.newsInfo.comments,
-        isCommented: this.newsInfo.isCommented,
-        likes: this.newsInfo.likes,
-        isLiked: this.newsInfo.isLiked,
-        collections: this.newsInfo.collections,
-        isCollected: this.newsInfo.isCollected,
+        socialInfo: this.newsInfo,
         shareClick: () => {
           if (this.newsInfo.isShared) {
             this.newsInfo.shares -= 1

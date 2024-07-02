@@ -1,17 +1,12 @@
 /**
  * 列表Item通用底部
  */
+import { SocialInfo } from '../../model/bean/SocialInfo'
+
 @Preview
 @Component
 export struct ItemBottom {
-  @Prop shares: number
-  @Prop isShared: boolean
-  @Prop comments: number
-  @Prop isCommented: boolean
-  @Prop likes: number
-  @Prop isLiked: boolean
-  @Prop collections: number
-  @Prop isCollected: boolean
+  @Prop socialInfo: SocialInfo
   // 分享被点击
   shareClick?: () => void
   // 评论被点击
@@ -23,27 +18,53 @@ export struct ItemBottom {
 
   build() {
     Row() {
-      this.IconCountBuilder($r('app.media.share_normal'), $r('app.media.share_selected'), this.shares,
-        this.isShared, this.shareClick)
-      this.IconCountBuilder($r('app.media.comment_normal'), $r('app.media.comment_selected'), this.comments,
-        this.isCommented, this.commentClick)
-      this.IconCountBuilder($r('app.media.like_normal'), $r('app.media.like_selected'), this.likes,
-        this.isLiked, this.likeClick)
-      this.IconCountBuilder($r('app.media.collect_normal'), $r('app.media.collect_selected'),
-        this.collections, this.isCollected, this.commentClick)
+      IconCountItem({
+        normalImage: $r('app.media.share_normal'),
+        SelectImage: $r('app.media.share_selected'),
+        count: this.socialInfo.shares,
+        isSelect: this.socialInfo.isShared,
+        click: this.shareClick
+      });
+
+      IconCountItem({
+        normalImage: $r('app.media.comment_normal'),
+        SelectImage: $r('app.media.comment_selected'),
+        count: this.socialInfo.comments,
+        isSelect: this.socialInfo.isCommented,
+        click: this.commentClick
+      });
+
+      IconCountItem({
+        normalImage: $r('app.media.like_normal'),
+        SelectImage: $r('app.media.like_selected'),
+        count: this.socialInfo.likes,
+        isSelect: this.socialInfo.isLiked,
+        click: this.likeClick
+      });
+
+      IconCountItem({
+        normalImage: $r('app.media.collect_normal'),
+        SelectImage: $r('app.media.collect_selected'),
+        count: this.socialInfo.collections,
+        isSelect: this.socialInfo.isCollected,
+        click: this.collectClick
+      });
     }.justifyContent(FlexAlign.SpaceEvenly).width('100%')
   }
+}
 
-  @Builder
-  IconCountBuilder(
-    normalImgRes: ResourceStr,
-    selectImgRes: ResourceStr,
-    count: number,
-    isSelect: boolean,
-    click?: () => void) {
+@Component
+struct IconCountItem {
+  @Prop count: number = 0;
+  @Prop isSelect: boolean = false;
+  @Prop normalImage: Resource;
+  @Prop SelectImage: Resource;
+  click?: () => void
+
+  build() {
     Row({ space: 2 }) {
-      Image(isSelect ? selectImgRes : normalImgRes).width(20).height(20)
-      Text(`${count}`).fontColor(isSelect ? Color.Red : Color.Gray)
-    }.alignItems(VerticalAlign.Center).onClick(() => click?.())
+      Image(this.isSelect ? this.SelectImage : this.normalImage).width(20).height(20)
+      Text(`${this.count}`).fontColor(this.isSelect ? Color.Red : Color.Gray)
+    }.alignItems(VerticalAlign.Center).onClick(() => this.click?.())
   }
 }

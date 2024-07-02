@@ -86,14 +86,7 @@ struct NewsDetailPage {
       // 新闻详情
       if (this.newsInfo.id) {
         ItemBottom({
-          shares: this.newsInfo.shares,
-          isShared: this.newsInfo.isShared,
-          comments: this.newsInfo.comments,
-          isCommented: this.newsInfo.isCommented,
-          likes: this.newsInfo.likes,
-          isLiked: this.newsInfo.isLiked,
-          collections: this.newsInfo.collections,
-          isCollected: this.newsInfo.isCollected,
+          socialInfo: this.newsInfo,
           shareClick: () => {
             if (this.newsInfo.isShared) {
               this.newsInfo.shares -= 1
@@ -127,14 +120,7 @@ struct NewsDetailPage {
       // 视频详情
       if (this.videoInfo.id) {
         ItemBottom({
-          shares: this.videoInfo.shares,
-          isShared: this.videoInfo.isShared,
-          comments: this.videoInfo.comments,
-          isCommented: this.videoInfo.isCommented,
-          likes: this.videoInfo.likes,
-          isLiked: this.videoInfo.isLiked,
-          collections: this.videoInfo.collections,
-          isCollected: this.videoInfo.isCollected,
+          socialInfo: this.videoInfo,
           shareClick: () => {
             if (this.videoInfo.isShared) {
               this.videoInfo.shares -= 1
