@@ -5,7 +5,6 @@ import { SocialInfo } from './SocialInfo'
  */
 @Observed
 export class NewsInfo extends SocialInfo {
-  id?: number // 新闻Id
   title?: string // 标题
   category?: string // 分类同请求的分类
   type: number = 0 // UI类型

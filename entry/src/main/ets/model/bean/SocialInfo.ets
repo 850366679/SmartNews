@@ -3,6 +3,7 @@
  */
 @Observed
 export class SocialInfo {
+    id?: number // 新闻Id
     shares: number = 0 // 分享数量
     isShared: boolean = false // 是否分享过
     comments: number = 0 // 评论数量

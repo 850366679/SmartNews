@@ -37,32 +37,19 @@ export struct ItemNews {
 
       ItemBottom({
         socialInfo: this.newsInfo,
-        shareClick: () => {
-          if (this.newsInfo.isShared) {
-            this.newsInfo.shares -= 1
-          } else {
-            this.newsInfo.shares += 1
-          }
-          this.newsInfo.isShared = !this.newsInfo.isShared
+        shareClick: () => { // 分享，分享成功后加1，再次分享继续加1
+          // if (this.newsInfo.isShared) {
+          //   this.newsInfo.shares -= 1
+          // } else {
+          //   this.newsInfo.shares += 1
+          // }
+          // this.newsInfo.isShared = !this.newsInfo.isShared
         },
-        commentClick: () => {
+        commentClick: () => { // 评论跳转详情
           this.jumpToDetail()
         },
-        likeClick: () => {
-          if (this.newsInfo.isLiked) {
-            this.newsInfo.likes -= 1
-          } else {
-            this.newsInfo.likes += 1
-          }
-          this.newsInfo.isLiked = !this.newsInfo.isLiked
-        },
-        collectClick: () => {
-          if (this.newsInfo.isCollected) {
-            this.newsInfo.collections -= 1
-          } else {
-            this.newsInfo.collections += 1
-          }
-          this.newsInfo.isCollected = !this.newsInfo.isCollected
+        collectClick: () => { // 收藏
+
         },
       })
 

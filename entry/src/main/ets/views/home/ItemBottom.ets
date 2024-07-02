@@ -6,7 +6,7 @@ import { SocialInfo } from '../../model/bean/SocialInfo'
 @Preview
 @Component
 export struct ItemBottom {
-  @Prop socialInfo: SocialInfo
+  @ObjectLink socialInfo: SocialInfo
   // 分享被点击
   shareClick?: () => void
   // 评论被点击
@@ -23,7 +23,9 @@ export struct ItemBottom {
         SelectImage: $r('app.media.share_selected'),
         count: this.socialInfo.shares,
         isSelect: this.socialInfo.isShared,
-        click: this.shareClick
+        click: () => {
+          this.shareClick?.()
+        }
       });
 
       IconCountItem({
@@ -39,7 +41,15 @@ export struct ItemBottom {
         SelectImage: $r('app.media.like_selected'),
         count: this.socialInfo.likes,
         isSelect: this.socialInfo.isLiked,
-        click: this.likeClick
+        click: () => {
+          if (this.socialInfo.isLiked) {
+            this.socialInfo.likes -= 1
+          } else {
+            this.socialInfo.likes += 1
+          }
+          this.socialInfo.isLiked = !this.socialInfo.isLiked
+          this.likeClick?.()
+        }
       });
 
       IconCountItem({
@@ -47,7 +57,15 @@ export struct ItemBottom {
         SelectImage: $r('app.media.collect_selected'),
         count: this.socialInfo.collections,
         isSelect: this.socialInfo.isCollected,
-        click: this.collectClick
+        click: () => {
+          if (this.socialInfo.isCollected) {
+            this.socialInfo.collections -= 1
+          } else {
+            this.socialInfo.collections += 1
+          }
+          this.socialInfo.isCollected = !this.socialInfo.isCollected
+          this.collectClick?.()
+        }
       });
     }.justifyContent(FlexAlign.SpaceEvenly).width('100%')
   }

@@ -8,6 +8,7 @@ import { TAG } from '../common/Contants';
 import { CommentsItem } from '../views/CommentsItem';
 import { ItemBottom } from '../views/home/ItemBottom';
 import { VideoInfo } from '../model/bean/VideoInfo';
+import { SocialInfo } from '../model/bean/SocialInfo';
 
 /**
  * 新闻详情页面
@@ -17,8 +18,7 @@ import { VideoInfo } from '../model/bean/VideoInfo';
 struct NewsDetailPage {
   // WebView控制器
   controller: webview.WebviewController = new webview.WebviewController();
-  @State newsInfo: NewsInfo = new NewsInfo()
-  @State videoInfo: VideoInfo = new VideoInfo()
+  @State detailInfo: SocialInfo = new NewsInfo()
   @State items: CommentInfo[] = []
   isLoading = false
   private newsId: number = -1
@@ -28,12 +28,11 @@ struct NewsDetailPage {
     let data = router.getParams() as NewsDetail
     this.isVideo = data.isVideo
     if (this.isVideo) {
-      this.videoInfo = data.data as VideoInfo
-      this.newsId = this.videoInfo.id ? this.videoInfo.id : 1
+      this.detailInfo = data.data as VideoInfo
     } else {
-      this.newsInfo = data.data as NewsInfo
-      this.newsId = this.newsInfo.id ? this.newsInfo.id : 1
+      this.detailInfo = data.data as NewsInfo
     }
+    this.newsId = this.detailInfo.id ? this.detailInfo.id : 1
     this.items.push(new CommentInfo(-1))
     this.loading()
   }
@@ -83,73 +82,19 @@ struct NewsDetailPage {
         }
       })
 
-      // 新闻详情
-      if (this.newsInfo.id) {
-        ItemBottom({
-          socialInfo: this.newsInfo,
-          shareClick: () => {
-            if (this.newsInfo.isShared) {
-              this.newsInfo.shares -= 1
-            } else {
-              this.newsInfo.shares += 1
-            }
-            this.newsInfo.isShared = !this.newsInfo.isShared
-          },
-          commentClick: () => {
+      // 底部状态
+      ItemBottom({
+        socialInfo: this.detailInfo,
+        shareClick: () => {
 
-          },
-          likeClick: () => {
-            if (this.newsInfo.isLiked) {
-              this.newsInfo.likes -= 1
-            } else {
-              this.newsInfo.likes += 1
-            }
-            this.newsInfo.isLiked = !this.newsInfo.isLiked
-          },
-          collectClick: () => {
-            if (this.newsInfo.isCollected) {
-              this.newsInfo.collections -= 1
-            } else {
-              this.newsInfo.collections += 1
-            }
-            this.newsInfo.isCollected = !this.newsInfo.isCollected
-          },
-        })
-      }
+        },
+        commentClick: () => {
 
-      // 视频详情
-      if (this.videoInfo.id) {
-        ItemBottom({
-          socialInfo: this.videoInfo,
-          shareClick: () => {
-            if (this.videoInfo.isShared) {
-              this.videoInfo.shares -= 1
-            } else {
-              this.videoInfo.shares += 1
-            }
-            this.videoInfo.isShared = !this.videoInfo.isShared
-          },
-          commentClick: () => {
+        },
+        collectClick: () => {
 
-          },
-          likeClick: () => {
-            if (this.videoInfo.isLiked) {
-              this.videoInfo.likes -= 1
-            } else {
-              this.videoInfo.likes += 1
-            }
-            this.videoInfo.isLiked = !this.newsInfo.isLiked
-          },
-          collectClick: () => {
-            if (this.videoInfo.isCollected) {
-              this.videoInfo.collections -= 1
-            } else {
-              this.videoInfo.collections += 1
-            }
-            this.videoInfo.isCollected = !this.newsInfo.isCollected
-          },
-        })
-      }
+        },
+      })
     }
     .height('100%')
     .width('100%')

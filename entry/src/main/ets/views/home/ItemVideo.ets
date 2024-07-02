@@ -36,32 +36,19 @@ export struct ItemVideo {
 
       ItemBottom({
         socialInfo: this.item,
-        shareClick: () => {
-          if (this.item.isShared) {
-            this.item.shares -= 1
-          } else {
-            this.item.shares += 1
-          }
-          this.item.isShared = !this.item.isShared
+        shareClick: () => { // 分享，分享成功后加1，再次分享继续加1
+          // if (this.item.isShared) {
+          //   this.item.shares -= 1
+          // } else {
+          //   this.item.shares += 1
+          // }
+          // this.item.isShared = !this.item.isShared
         },
-        commentClick: () => {
+        commentClick: () => { // 评论跳转详情
           this.jumpToDetail()
         },
-        likeClick: () => {
-          if (this.item.isLiked) {
-            this.item.likes -= 1
-          } else {
-            this.item.likes += 1
-          }
-          this.item.isLiked = !this.item.isLiked
-        },
-        collectClick: () => {
-          if (this.item.isCollected) {
-            this.item.collections -= 1
-          } else {
-            this.item.collections += 1
-          }
-          this.item.isCollected = !this.item.isCollected
+        collectClick: () => { // 收藏
+
         },
       })
 
