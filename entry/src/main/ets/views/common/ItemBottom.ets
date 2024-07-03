@@ -12,9 +12,9 @@ export struct ItemBottom {
   // 评论被点击
   commentClick?: () => void
   // 喜欢被点击
-  likeClick?: () => void
+  likeClick?: (likes: number, isLiked: boolean) => void
   // 收藏被点击
-  collectClick?: () => void
+  collectClick?: (isCollect: boolean) => Promise<boolean>
 
   build() {
     Row() {
@@ -33,7 +33,9 @@ export struct ItemBottom {
         SelectImage: $r('app.media.comment_selected'),
         count: this.socialInfo.comments,
         isSelect: this.socialInfo.isCommented,
-        click: this.commentClick
+        click: () => {
+          this.commentClick?.()
+        }
       });
 
       IconCountItem({
@@ -48,7 +50,7 @@ export struct ItemBottom {
             this.socialInfo.likes += 1
           }
           this.socialInfo.isLiked = !this.socialInfo.isLiked
-          this.likeClick?.()
+          this.likeClick?.(this.socialInfo.likes, this.socialInfo.isLiked)
         }
       });
 
@@ -57,14 +59,16 @@ export struct ItemBottom {
         SelectImage: $r('app.media.collect_selected'),
         count: this.socialInfo.collections,
         isSelect: this.socialInfo.isCollected,
-        click: () => {
-          if (this.socialInfo.isCollected) {
-            this.socialInfo.collections -= 1
-          } else {
-            this.socialInfo.collections += 1
+        click: async () => {
+          // 先更新数据库，成功后刷新UI， 没成功保持不变
+          if (await this.collectClick?.(!this.socialInfo.isCollected)) {
+            if (this.socialInfo.isCollected) {
+              this.socialInfo.collections -= 1
+            } else {
+              this.socialInfo.collections += 1
+            }
+            this.socialInfo.isCollected = !this.socialInfo.isCollected
           }
-          this.socialInfo.isCollected = !this.socialInfo.isCollected
-          this.collectClick?.()
         }
       });
     }.justifyContent(FlexAlign.SpaceEvenly).width('100%')
@@ -83,6 +87,8 @@ struct IconCountItem {
     Row({ space: 2 }) {
       Image(this.isSelect ? this.SelectImage : this.normalImage).width(20).height(20)
       Text(`${this.count}`).fontColor(this.isSelect ? Color.Red : Color.Gray)
-    }.alignItems(VerticalAlign.Center).onClick(() => this.click?.())
+    }.alignItems(VerticalAlign.Center).onClick(() => {
+      this.click?.()
+    })
   }
 }

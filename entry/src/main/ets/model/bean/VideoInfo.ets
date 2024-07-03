@@ -13,7 +13,7 @@ export class VideoInfo extends SocialInfo {
    authorImg?: string // 用户头像
    videoUrl?: string // 视频链接
    detailUrl?: string // 详情链接
-   type?: string // 类型
+   type?: number // 类型
    content1?: string // 评论1
    content2?: string // 评论2
 }

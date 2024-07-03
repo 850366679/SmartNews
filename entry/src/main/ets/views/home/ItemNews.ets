@@ -1,8 +1,13 @@
 import { NewsInfo } from '../../model/bean/NewsInfo'
-import { ItemBottom } from './ItemBottom'
-import { ItemHeader } from './ItemHeader'
+import { ItemBottom } from '../common/ItemBottom'
+import { ItemHeader } from '../common/ItemHeader'
 import { router } from '@kit.ArkUI'
 import { NewsDetail } from '../../pages/NewsDetailPage'
+import { systemShare } from '@kit.ShareKit';
+import { uniformTypeDescriptor as utd } from '@kit.ArkData';
+import { common, Want, wantConstant } from '@kit.AbilityKit'
+import { TAG } from '../../common/Contants'
+import DbManager from '../../model/db/DbManager'
 
 /**
  * 新闻Item
@@ -11,6 +16,20 @@ import { NewsDetail } from '../../pages/NewsDetailPage'
 @Component
 export struct ItemNews {
   @State newsInfo: NewsInfo = new NewsInfo()
+  private context = getContext(this) as common.UIAbilityContext
+  private shareController: systemShare.ShareController | null = null
+
+  aboutToAppear(): void {
+    // let a = new systemShare.SharedData({
+    //   utd: utd.UniformDataType.PLAIN_TEXT,
+    //   content: this.newsInfo.url
+    // })
+    // this.shareController = new systemShare.ShareController(a)
+    // this.shareController.on('dismiss', () => {
+    //   // 分享成功
+    //   this.shareSuccess()
+    // })
+  }
 
   /**
    * 跳转至详情
@@ -38,18 +57,23 @@ export struct ItemNews {
       ItemBottom({
         socialInfo: this.newsInfo,
         shareClick: () => { // 分享，分享成功后加1，再次分享继续加1
-          // if (this.newsInfo.isShared) {
-          //   this.newsInfo.shares -= 1
-          // } else {
-          //   this.newsInfo.shares += 1
-          // }
-          // this.newsInfo.isShared = !this.newsInfo.isShared
+          this.shareClicked()
         },
         commentClick: () => { // 评论跳转详情
           this.jumpToDetail()
         },
-        collectClick: () => { // 收藏
-
+        likeClick: (likes: number, isLiked: boolean) => {
+          // 更新数据库
+          DbManager.update(this.newsInfo, { 'likes': likes, 'isLiked': isLiked })
+        },
+        collectClick: async (b) => { // 收藏
+          if (b) {
+            let a = await DbManager.insertNewsInfo(this.newsInfo)
+            return a ? true : false
+          } else {
+            await DbManager.delete(this.newsInfo)
+            return true
+          }
         },
       })
 
@@ -79,5 +103,24 @@ export struct ItemNews {
     } else {
       Row().height(2)
     }
+  }
+
+  /**
+   * 分享
+   */
+  shareClicked() {
+    // this.shareController?.show(this.context, {
+    //   previewMode: systemShare.SharePreviewMode.DETAIL,
+    //   selectionMode: systemShare.SelectionMode.SINGLE
+    // })
+  }
+
+  /**
+   * 分享成功，刷新数据
+   */
+  shareSuccess() {
+    console.log(TAG, 'ItemNews shareSuccess share success')
+    this.newsInfo.shares += 1
+    this.newsInfo.isShared = true
   }
 }

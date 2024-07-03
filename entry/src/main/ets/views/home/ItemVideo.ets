@@ -1,8 +1,9 @@
 import { VideoInfo } from '../../model/bean/VideoInfo'
-import { ItemBottom } from './ItemBottom'
-import { ItemHeader } from './ItemHeader'
+import { ItemBottom } from '../common/ItemBottom'
+import { ItemHeader } from '../common/ItemHeader'
 import { router } from '@kit.ArkUI'
 import { NewsDetail } from '../../pages/NewsDetailPage'
+import DbManager from '../../model/db/DbManager'
 
 /**
  * 视频Item
@@ -47,8 +48,18 @@ export struct ItemVideo {
         commentClick: () => { // 评论跳转详情
           this.jumpToDetail()
         },
-        collectClick: () => { // 收藏
-
+        likeClick: (likes: number, isLiked: boolean) => {
+          // 更新数据库
+          DbManager.update(this.item, { 'likes': likes, 'isLiked': isLiked })
+        },
+        collectClick: async (b) => { // 收藏
+          if (b) {
+            let a = await DbManager.insertVideoInfo(this.item)
+            return a ? true : false
+          } else {
+            await DbManager.delete(this.item)
+            return true
+          }
         },
       })
 

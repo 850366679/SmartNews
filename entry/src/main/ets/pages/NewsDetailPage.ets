@@ -6,9 +6,10 @@ import { CommentInfo } from '../model/bean/CommentInfo';
 import dataRequest from '../model/network/DataRequest';
 import { TAG } from '../common/Contants';
 import { CommentsItem } from '../views/CommentsItem';
-import { ItemBottom } from '../views/home/ItemBottom';
+import { ItemBottom } from '../views/common/ItemBottom';
 import { VideoInfo } from '../model/bean/VideoInfo';
 import { SocialInfo } from '../model/bean/SocialInfo';
+import DbManager from '../model/db/DbManager';
 
 /**
  * 新闻详情页面
@@ -18,7 +19,7 @@ import { SocialInfo } from '../model/bean/SocialInfo';
 struct NewsDetailPage {
   // WebView控制器
   controller: webview.WebviewController = new webview.WebviewController();
-  @State detailInfo: SocialInfo = new NewsInfo()
+  @State detailInfo: SocialInfo = new SocialInfo()
   @State items: CommentInfo[] = []
   isLoading = false
   private newsId: number = -1
@@ -86,13 +87,28 @@ struct NewsDetailPage {
       ItemBottom({
         socialInfo: this.detailInfo,
         shareClick: () => {
-
+          // 功能缺失
         },
         commentClick: () => {
 
         },
-        collectClick: () => {
-
+        likeClick: (likes: number, isLiked: boolean) => {
+          // 更新数据库
+          DbManager.update(this.detailInfo, { 'likes': likes, 'isLiked': isLiked })
+        },
+        collectClick: async (b) => { // 收藏
+          if (b) {
+            if (!this.isVideo) {
+              let a = await DbManager.insertNewsInfo(this.detailInfo as NewsInfo)
+              return a ? true : false
+            } else {
+              let a = await DbManager.insertVideoInfo(this.detailInfo as VideoInfo)
+              return a ? true : false
+            }
+          } else {
+            await DbManager.delete(this.detailInfo)
+            return true
+          }
         },
       })
     }

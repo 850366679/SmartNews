@@ -5,17 +5,18 @@ import PreferencesUtils from '../common/utils/PreferencesUtils'
 import { COMMON_PREF_NAME } from '../common/Contants';
 import { TAG } from '../common/Contants'
 import { MMKV } from '@tencent/mmkv';
+import DbManager from '../model/db/DbManager';
 
 /**
  * 整个应用的入口
  */
 export default class EntryAbility extends UIAbility {
-
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     hilog.info(0x0000, TAG, '%{public}s', 'Ability onCreate');
     // 需要使用await， 并在onCreate方法上加上async
     await PreferencesUtils.loadPreferences(this.context, COMMON_PREF_NAME)
     MMKV.initialize(this.context.getApplicationContext())
+    DbManager.init(this.context)
   }
 
   onDestroy(): void {
