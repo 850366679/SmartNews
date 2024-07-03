@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/rayms/.ohos/config/default_SmartNews_AwSpiMICjEMHAzIfGf46JUykIBksKoBQdtnx8Gc6I8E=.cer",
+          "storePassword": "0000001B9CEA498375938687B2B61EE6AD6856D1B6923BC315E545624E49AF8AF99DE6DD3F2DCA513398B3",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BCB8B67C465BB0F9B3BB5B2FD55BF7D3B56753974B0D71F53947C9F926589E1DCE08561E0CCB46C",
+          "profile": "/Users/rayms/.ohos/config/default_SmartNews_AwSpiMICjEMHAzIfGf46JUykIBksKoBQdtnx8Gc6I8E=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/rayms/.ohos/config/default_SmartNews_AwSpiMICjEMHAzIfGf46JUykIBksKoBQdtnx8Gc6I8E=.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",

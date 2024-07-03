@@ -44,4 +44,9 @@ export interface IDbManager {
    * @returns
    */
   queryAll(): Promise<SocialInfo[]>
+
+  /**
+   * 删除全部
+   */
+  deleteAll(): Promise<void>
 }

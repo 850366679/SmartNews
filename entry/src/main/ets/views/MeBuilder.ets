@@ -81,7 +81,11 @@ export struct MeBuilder {
   UserInformationBuilder() {
     Column() {
       Column({ space: 24 }) {
-        Image($r('app.media.ic_user_profile')).width(65).height(65)
+        if (this.userImage?.startsWith('file')) {
+          Image(this.userImage).width(65).height(65).borderRadius(32.5)
+        } else {
+          Image($r('app.media.ic_user_profile')).width(65).height(65)
+        }
         Text(this.userName)
       }.padding(32)
 
@@ -103,9 +107,11 @@ export struct MeBuilder {
         Row() {
           Text('我的收藏')
           Image($r('app.media.arrow_right')).smallIconSize()
-        }.justifyContent(FlexAlign.SpaceBetween)
+        }
+        .justifyContent(FlexAlign.SpaceBetween)
         .padding(12)
-        .alignItems(VerticalAlign.Center).width('100%')
+        .alignItems(VerticalAlign.Center)
+        .width('100%')
         .onClick(() => {
           router.pushUrl({ url: 'pages/CollectPage' })
         })

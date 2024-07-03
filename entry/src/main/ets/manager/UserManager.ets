@@ -1,5 +1,6 @@
 import { MMKV } from '@tencent/mmkv'
 import { UserInfo } from '../model/bean/UserInfo'
+import DbManager from '../model/db/DbManager'
 
 const KEY_USER_ID = 'key_user_save_id'
 const KEY_USER_NAME = 'key_user_save_name'
@@ -88,6 +89,9 @@ class UserManager implements IUserManager {
     this.mmkv.encodeString(KEY_USER_PHONE, '')
     this.mmkv.encodeInt32(KEY_USER_STATUS, -1)
     this.mmkv.encodeString(KEY_USER_TOKEN, '')
+    DbManager.deleteAll().then(() => {
+      // do nothing
+    })
   }
 
   /**
@@ -133,6 +137,18 @@ class UserManager implements IUserManager {
     info.token = this.curUser?.token
     this.curUser = info
     this.saveUserData(info)
+  }
+
+  /**
+   * 修改头像
+   * @param uri
+   */
+  saveAvatarImage(uri: string): void {
+    if (this.curUser === null) {
+      return
+    }
+    this.curUser!!.imageUrl = uri
+    this.mmkv.encodeString(KEY_USER_IMAGE, uri)
   }
 }
 
@@ -189,5 +205,11 @@ interface IUserManager {
    * 更新用户信息
    * @param info
    */
-  updateUserInfo(info : UserInfo) : void
+  updateUserInfo(info: UserInfo): void
+
+  /**
+   * 修改头像
+   * @param uri
+   */
+  saveAvatarImage(uri: string): void
 }

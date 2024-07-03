@@ -322,6 +322,18 @@ class DbManager implements IDbManager {
     }
     return a
   }
+
+  /**
+   * 删除全部
+   */
+  async deleteAll(): Promise<void> {
+    if (this.myRdbStore === null) {
+      return
+    }
+    let p = new relationalStore.RdbPredicates(COLLECT_TABLE_NAME)
+    p.inAllDevices()
+    await this.myRdbStore.delete(p)
+  }
 }
 
 const dbManager = new DbManager()

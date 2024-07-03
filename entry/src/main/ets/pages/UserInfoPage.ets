@@ -3,6 +3,11 @@ import { TAG } from '../common/Contants';
 import UserManager from '../manager/UserManager';
 import { UserInfo } from '../model/bean/UserInfo';
 import UserRequest from '../model/network/UserRequest';
+import { photoAccessHelper } from '@kit.MediaLibraryKit';
+import { fileIo } from '@kit.CoreFileKit';
+import { BusinessError } from '@kit.BasicServicesKit';
+import PermissionManager from '../manager/PermissionManager';
+import { common } from '@kit.AbilityKit';
 
 /**
  * 用户详情和编辑页面
@@ -12,6 +17,47 @@ import UserRequest from '../model/network/UserRequest';
 struct UserInfoPage {
   @State isEdit: boolean = false
   @State userInfo: UserInfo = UserManager.getCurUser()
+  private photoSelectOptions: photoAccessHelper.PhotoSelectOptions = new photoAccessHelper.PhotoSelectOptions();
+  private photoViewPicker = new photoAccessHelper.PhotoViewPicker();
+
+  aboutToAppear(): void {
+    // 过滤选择媒体文件类型为IMAGE
+    this.photoSelectOptions.MIMEType = photoAccessHelper.PhotoViewMIMETypes.IMAGE_TYPE;
+    // 选择媒体文件的最大数目
+    this.photoSelectOptions.maxSelectNumber = 1;
+  }
+
+  /**
+   * 点击了选择头像
+   */
+  private async pickAvatarImg() {
+    let hasPermission = await PermissionManager.checkPermissions()
+    if (hasPermission) {
+      this.realPickImage()
+    } else {
+      let requested = await PermissionManager.reqPermissionsFromUser(getContext(this) as common.UIAbilityContext)
+      if (requested) {
+        this.realPickImage()
+      }
+    }
+  }
+
+  /**
+   * 真正的去选择图片
+   */
+  private realPickImage() {
+    this.photoViewPicker.select(this.photoSelectOptions)
+      .then((photoSelectResult: photoAccessHelper.PhotoSelectResult) => {
+        // 保存头像路径
+        let uri = photoSelectResult.photoUris?.[0]
+        if (uri) {
+          this.userInfo.imageUrl = uri
+        }
+      })
+      .catch((err: BusinessError) => {
+        console.log(TAG, 'UserInfoPage, pickAvatarImg', JSON.stringify(err))
+      })
+  }
 
   @Styles
   backStyle(){
@@ -48,9 +94,27 @@ struct UserInfoPage {
 
       Column({ space: 12 }) {
         Stack() {
-          Image($r('app.media.ic_user_profile'))
+          if (this.userInfo.imageUrl?.startsWith('file')) {
+            Image(this.userInfo.imageUrl)
+              .onClick(() => {
+                // 编辑状态才处理点击事件
+                if (this.isEdit) {
+                  this.pickAvatarImg()
+                }
+              }).borderRadius(60)
+          } else {
+            Image($r('app.media.ic_user_profile'))
+              .onClick(() => {
+                // 编辑状态才处理点击事件
+                if (this.isEdit) {
+                  this.pickAvatarImg()
+                }
+              })
+          }
           if (this.isEdit) {
-            Text('点击修改').opacity(0.6)
+            Text('点击修改').opacity(0.6).onClick(() => {
+              this.pickAvatarImg()
+            })
           }
         }.width(120).height(120)
 
