@@ -106,6 +106,9 @@ export struct MeBuilder {
         }.justifyContent(FlexAlign.SpaceBetween)
         .padding(12)
         .alignItems(VerticalAlign.Center).width('100%')
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/CollectPage' })
+        })
       }.width('100%').backgroundColor(Color.White)
     }.width('100%')
   }

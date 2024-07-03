@@ -12,6 +12,8 @@ import DbManager from '../../model/db/DbManager'
 @Component
 export struct ItemVideo {
   @State item: VideoInfo = new VideoInfo()
+  // 取消收藏监听
+  cancelCollect?: (b: boolean) => void
 
   /**
    * 跳转至详情
@@ -57,7 +59,8 @@ export struct ItemVideo {
             let a = await DbManager.insertVideoInfo(this.item)
             return a ? true : false
           } else {
-            await DbManager.delete(this.item)
+            let num = await DbManager.delete(this.item)
+            this.cancelCollect?.(num ? true : false)
             return true
           }
         },

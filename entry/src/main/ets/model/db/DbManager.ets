@@ -84,8 +84,8 @@ class DbManager implements IDbManager {
       'isCommented': info.isCommented ? info.isCommented : false,
       'likes': info.likes ? info.likes : 0,
       'isLiked': info.isLiked ? info.isLiked : false,
-      'collections': info.collections ? info.collections : 0,
-      'isCollected': info.isCollected ? info.isCollected : false,
+      'collections': info.collections ? info.collections + 1 : 1,
+      'isCollected': true,
       'isVideo': false,
     })
   }
@@ -112,8 +112,8 @@ class DbManager implements IDbManager {
       'isCommented': info.isCommented ? info.isCommented : false,
       'likes': info.likes ? info.likes : 0,
       'isLiked': info.isLiked ? info.isLiked : false,
-      'collections': info.collections ? info.collections : 0,
-      'isCollected': info.isCollected ? info.isCollected : false,
+      'collections': info.collections ? info.collections + 1 : 1,
+      'isCollected': true,
       'isVideo': true,
     })
   }
@@ -198,17 +198,14 @@ class DbManager implements IDbManager {
       let netId: number | undefined
       let title: string | undefined
       let createDate: number | undefined
-      if (info instanceof NewsInfo) {
+      if (!info.isVideo) {
         netId = info.id
-        title = info.title
-        createDate = info.date
-      } else if (info instanceof VideoInfo) {
-        netId = info.id
-        title = info.title
-        createDate = info.date
+        title = (info as NewsInfo).title
+        createDate = (info as NewsInfo).date
       } else {
-        resolve([])
-        return
+        netId = info.id
+        title = (info as VideoInfo).title
+        createDate = (info as VideoInfo).date
       }
       let p = new relationalStore.RdbPredicates(COLLECT_TABLE_NAME)
       p.equalTo('netId', netId)
@@ -262,6 +259,7 @@ class DbManager implements IDbManager {
       let dbId = result.getLong(result.getColumnIndex('id'))
       let id = result.getLong(result.getColumnIndex('netId'))
       let title = result.getString(result.getColumnIndex('title'))
+      let subtitle = result.getString(result.getColumnIndex('subtitle'))
       let type = result.getLong(result.getColumnIndex('type'))
       let abstract = result.getString(result.getColumnIndex('abstract'))
       let date = result.getLong(result.getColumnIndex('date'))
@@ -280,6 +278,7 @@ class DbManager implements IDbManager {
         let videoInfo: VideoInfo = {
           id,
           title,
+          subtitle,
           type: type,
           abstract,
           date,
@@ -293,13 +292,15 @@ class DbManager implements IDbManager {
           isLiked: isLiked ? true : false,
           collections,
           isCollected: isCollected ? true : false,
-          dbId
+          dbId,
+          isVideo: isVideo ? true : false
         }
         a.push(videoInfo)
       } else { // 新闻
         let newsInfo: NewsInfo = {
           id,
           title,
+          subtitle,
           type,
           abstract,
           date,
@@ -313,7 +314,8 @@ class DbManager implements IDbManager {
           isLiked: isLiked ? true : false,
           collections,
           isCollected: isCollected ? true : false,
-          dbId
+          dbId,
+          isVideo: isVideo ? true : false
         }
         a.push(newsInfo)
       }

@@ -18,6 +18,8 @@ export struct ItemNews {
   @State newsInfo: NewsInfo = new NewsInfo()
   private context = getContext(this) as common.UIAbilityContext
   private shareController: systemShare.ShareController | null = null
+  // 取消收藏监听
+  cancelCollect?: (b: boolean) => void
 
   aboutToAppear(): void {
     // let a = new systemShare.SharedData({
@@ -71,7 +73,8 @@ export struct ItemNews {
             let a = await DbManager.insertNewsInfo(this.newsInfo)
             return a ? true : false
           } else {
-            await DbManager.delete(this.newsInfo)
+            let num = await DbManager.delete(this.newsInfo)
+            this.cancelCollect?.(num ? true : false)
             return true
           }
         },

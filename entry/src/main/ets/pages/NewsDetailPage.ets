@@ -10,6 +10,8 @@ import { ItemBottom } from '../views/common/ItemBottom';
 import { VideoInfo } from '../model/bean/VideoInfo';
 import { SocialInfo } from '../model/bean/SocialInfo';
 import DbManager from '../model/db/DbManager';
+import { InputCommentDialog } from '../dialog/InputCommentDialog';
+import UserManager from '../manager/UserManager';
 
 /**
  * 新闻详情页面
@@ -24,6 +26,32 @@ struct NewsDetailPage {
   isLoading = false
   private newsId: number = -1
   @State isVideo: boolean = false
+  dialogController = new CustomDialogController({
+    builder: InputCommentDialog({
+      commit: (s): void => {
+        this.commitComment(s)
+      }
+    })
+  })
+
+  /**
+   * 提交评论
+   * @param s
+   */
+  commitComment(s: string) {
+    let me = UserManager.getCurUser()
+    let newComment = new CommentInfo(-2)
+    newComment.userName = me.name
+    newComment.userAvatar = me.imageUrl
+    newComment.content = s
+    newComment.createTime = Date.now()
+
+    // 给数组的第二位添加元素
+    this.items.splice(1, 0, newComment)
+
+    this.detailInfo.isCommented = true
+    this.detailInfo.comments += 1
+  }
 
   aboutToAppear(): void {
     let data = router.getParams() as NewsDetail
@@ -90,7 +118,8 @@ struct NewsDetailPage {
           // 功能缺失
         },
         commentClick: () => {
-
+          // 弹窗去评论
+          this.dialogController.open()
         },
         likeClick: (likes: number, isLiked: boolean) => {
           // 更新数据库

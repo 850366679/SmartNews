@@ -13,4 +13,5 @@ export class SocialInfo {
   collections: number = 0 // 收藏数量
   isCollected: boolean = false // 是否收藏过
   dbId?: number = -1 // 数据库ID
+  isVideo : boolean = false // 是否是视频
 }

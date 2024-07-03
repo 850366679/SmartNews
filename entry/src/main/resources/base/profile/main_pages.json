@@ -6,6 +6,7 @@
     "pages/LoginPage",
     "pages/UserInfoPage",
     "pages/AboutPage",
-    "pages/WebPage"
+    "pages/WebPage",
+    "pages/CollectPage"
   ]
 }

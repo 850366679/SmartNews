@@ -14,4 +14,5 @@ export class NewsInfo extends SocialInfo {
   author?: string // 发布作者
   authorImg?: string // 用户头像
   url?: string // 新闻详情链接
+  isVideo: boolean = false // 不是视频
 }

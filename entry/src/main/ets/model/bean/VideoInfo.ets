@@ -16,4 +16,5 @@ export class VideoInfo extends SocialInfo {
    type?: number // 类型
    content1?: string // 评论1
    content2?: string // 评论2
+   isVideo: boolean = true // 不是视频
 }
