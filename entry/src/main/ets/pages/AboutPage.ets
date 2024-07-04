@@ -41,7 +41,7 @@ struct AboutPage {
 
       Column({ space: 12 }) {
         Column({ space: 10 }) {
-          Image($r('app.media.icon')).width(100)
+          Image($r("app.media.app_icon")).width(100)
           Text($r('app.string.EntryAbility_label')).fontColor('#333').fontSize(32).fontWeight(FontWeight.Bold)
           Text(`Version ${this.versionName}`)
             .fontSize(14)

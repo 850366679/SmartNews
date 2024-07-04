@@ -108,7 +108,7 @@ struct WelcomePage {
   @Builder
   CenterView() {
     Column() {
-      Image($r('app.media.icon')).width(100)
+      Image($r("app.media.app_icon")).width(100)
       Text($r('app.string.EntryAbility_label')).fontColor('#fff').fontSize(32).fontWeight(FontWeight.Bold)
     }
   }

@@ -85,16 +85,24 @@ export struct ItemVideo {
       })
       this.showVideo()
       Row() {
-        Checkbox().width(0.01).height(0.01).opacity(0)
-          .select(this.playEnable).onChange(() => {
-          console.log(TAG, 'Checkbox change!!!!')
-          this.startPlay()
-        })
-        Checkbox().width(0.01).height(0.01).opacity(0)
-          .select(this.currentCenterItem === this.mIndex).onChange(() => {
-          console.log(TAG, 'Checkbox change!!!!')
-          this.startPlay()
-        })
+        Checkbox()
+          .width(0.01)
+          .height(0.01)
+          .opacity(0)
+          .select(this.playEnable)
+          .onChange(() => {
+            console.log(TAG, 'Checkbox change!!!!')
+            this.startPlay()
+          })
+        Checkbox()
+          .width(0.01)
+          .height(0.01)
+          .opacity(0)
+          .select(this.currentCenterItem === this.mIndex)
+          .onChange(() => {
+            console.log(TAG, 'Checkbox change!!!!')
+            this.startPlay()
+          })
       }
 
       ItemBottom({
@@ -132,6 +140,14 @@ export struct ItemVideo {
 
   @Builder
   showVideo() {
-    Video({ src: $rawfile('video4.mp4'), controller: this.controller }).height(200)
+    Video({ src: $rawfile(`video${this.getRandomNumber()}.mp4`), controller: this.controller }).height(200)
+  }
+
+  /**
+   * 生成随机数
+   * @returns
+   */
+  private getRandomNumber() {
+    return Math.floor(Math.random() * 4) + 1;
   }
 }
