@@ -29,6 +29,10 @@ export struct MeBuilder {
    * 登出事件
    */
   logout?: () => void
+  /**
+   * 自动播放监听回调
+   */
+  playsStateChanged?: (b: boolean) => void
 
   @Styles
   smallIconSize(){
@@ -143,6 +147,7 @@ export struct MeBuilder {
         Toggle({ type: ToggleType.Switch, isOn: this.isVideoPlayOpen }).onChange(async (value: boolean) => {
           this.isVideoPlayOpen = value
           await PreferencesUtil.putPreferencesValue(COMMON_PREF_NAME, 'is_video_play_open', value)
+          this.playsStateChanged?.(value)
         })
       }.justifyContent(FlexAlign.SpaceBetween)
       .padding(12)

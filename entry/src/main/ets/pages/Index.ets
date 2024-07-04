@@ -1,8 +1,9 @@
-import { TAG } from '../common/Contants'
 import UserManager from '../manager/UserManager'
 import { HomeBuilder } from '../views/HomeBuilder'
 import { MeBuilder } from '../views/MeBuilder'
 import { VideoBuilder } from '../views/VideoBuilder'
+import { COMMON_PREF_NAME, TAG } from '../common/Contants'
+import preferencesUtil from '../common/utils/PreferencesUtils'
 
 /**
  * 主页，有三个TAB，分别是首页、视频、我的
@@ -17,6 +18,24 @@ struct Index {
   @State userName: string | null | undefined = ''
   // 头像
   @State userImage: string | null | undefined = ''
+  // 是否可播放
+  @State playEnable: boolean = false
+  // 自动播放的开关状态
+  private playSwitchOn = false
+
+  async aboutToAppear() {
+    this.playSwitchOn =
+      await preferencesUtil.getPreferencesValue(COMMON_PREF_NAME, 'is_video_play_open', false) as boolean
+    this.refreshPlayEnable()
+  }
+
+  /**
+   * 刷新是否可播放的状态
+   * @param playSwitchOn 自动播放的开关状态
+   */
+  private async refreshPlayEnable() {
+    this.playEnable = this.playSwitchOn && this.currentIndex === 1
+  }
 
   onPageShow(): void {
     this.refreshUserInfo()
@@ -48,7 +67,7 @@ struct Index {
         $r('app.string.tab_home'), 0))
 
       TabContent() {
-        VideoBuilder()
+        VideoBuilder({ playEnable: this.playEnable })
       }.tabBar(this.TabBuilder($r('app.media.video_normal'),
         $r('app.media.video_selected'),
         $r('app.string.tab_video'), 1))
@@ -61,6 +80,10 @@ struct Index {
           logout: () => {
             UserManager.logout()
             this.refreshUserInfo()
+          },
+          playsStateChanged: (b) => {
+            this.playSwitchOn = b
+            this.refreshPlayEnable()
           }
         })
       }.tabBar(this.TabBuilder($r('app.media.mine_normal'),
@@ -68,6 +91,7 @@ struct Index {
         $r('app.string.tab_me'), 2))
     }.onChange(index => {
       this.currentIndex = index
+      this.refreshPlayEnable()
     }).scrollable(false)
   }
 
